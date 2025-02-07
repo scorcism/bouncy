@@ -1,11 +1,9 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-
-const float GRAVITY = 9.8f;
+const float GRAVITY = 1.8f;
 const float DAMPING = 0.8f;
 const float BALL_RADIUS = 55.0f;
-
 
 struct Ball {
 	sf::CircleShape shape;
@@ -44,8 +42,16 @@ int main(){
 				sf::Vector2i mousePosition = mouseButtonPressed->position;
 				sf::Vector2f mousePositionFloat = static_cast<sf::Vector2f>(mousePosition);
 				if (mouseButtonPressed->button == sf::Mouse::Button::Left) {
-					
-						balls.emplace_back(mousePosition.x - BALL_RADIUS, mousePosition.y - BALL_RADIUS);
+					bool alreadyBall = false;
+					for (auto& ball : balls) {
+						if (ball.shape.getGlobalBounds().contains(mousePositionFloat)) {
+							selectedBall = &ball;
+							ball.isDragging = true;
+							alreadyBall = true;
+							break;
+						}
+					}
+					if(!alreadyBall) balls.emplace_back(mousePosition.x - BALL_RADIUS, mousePosition.y - BALL_RADIUS);
 				}else if (mouseButtonPressed->button == sf::Mouse::Button::Right) {
 					for (auto it = balls.begin(); it != balls.end(); ++it) {
 						if (it->shape.getGlobalBounds().contains(mousePositionFloat)) {
@@ -55,6 +61,19 @@ int main(){
 					}
 				}
 			}
+			if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>()) {
+				if (selectedBall) {
+					selectedBall->isDragging = false;
+					selectedBall = nullptr;
+				}
+			}
+		}
+
+		if (selectedBall && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+			sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
+			sf::Vector2f mouseP = static_cast<sf::Vector2f>(mousePos);
+			selectedBall->shape.setPosition({ mouseP.x - BALL_RADIUS, mouseP.y - BALL_RADIUS });
+			selectedBall->velocity = { 0.0f, 0.0f };
 		}
 
 		//Add gravity to the balls
@@ -72,7 +91,6 @@ int main(){
 				ball.shape.setPosition(pos);
 			}
 		}
-
 
 		//Render
 		window->clear(sf::Color::Black);
