@@ -1,9 +1,1 @@
-﻿  main.cpp
-C:\Personal\Learning\learning\sfmlDev\codes\bounce_back\External\include\SFML\System\Exception.hpp(41,47): warning C4275: non dll-interface class 'std::runtime_error' used as base for dll-interface class 'sf::Exception'
-  (compiling source file 'main.cpp')
-      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\stdexcept(100,19):
-      see declaration of 'std::runtime_error'
-      C:\Personal\Learning\learning\sfmlDev\codes\bounce_back\External\include\SFML\System\Exception.hpp(41,23):
-      see declaration of 'sf::Exception'
-  
-  ladoo.vcxproj -> C:\Personal\Learning\learning\sfmlDev\codes\bounce_back\x64\Debug\ladoo.exe
+﻿LINK : fatal error LNK1168: cannot open C:\Personal\Learning\learning\sfmlDev\codes\bounce_back\x64\Debug\ladoo.exe for writing

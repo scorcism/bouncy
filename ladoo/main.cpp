@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <sstream>
 
 const float GRAVITY = 1.8f;
 const float DAMPING = 0.8f;
@@ -8,12 +9,14 @@ const float BALL_RADIUS = 55.0f;
 struct Ball {
 	sf::CircleShape shape;
 	sf::Vector2f velocity;
+	int id;
 	bool isDragging = false;
 
-	Ball(float x, float y) {
+	Ball(float x, float y, int id) {
 		shape.setRadius(BALL_RADIUS);
 		shape.setFillColor(sf::Color::Red);
 		shape.setPosition({ x, y });
+		this->id = id;
 	}
 };
 
@@ -24,7 +27,20 @@ int main(){
 
 	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ width, height }), "Bouncy");
 	window->setFramerateLimit(60);
-	
+
+	sf::Font font;
+
+	if (!font.openFromFile("Assets/Fonts/Poppins-Black.ttf"))
+	{
+		std::cerr << "ERROR::COULD NOT LOAD FILE::Assets\Fonts\Poppins-Black.ttf" << std::endl;
+		return -1;
+	}
+
+	sf::Text ballsCount(font);
+
+	ballsCount.setFillColor(sf::Color::White);
+	ballsCount.setCharacterSize(18);
+
 	std::vector<Ball> balls;
 	Ball* selectedBall = nullptr;
 
@@ -51,7 +67,7 @@ int main(){
 							break;
 						}
 					}
-					if(!alreadyBall) balls.emplace_back(mousePosition.x - BALL_RADIUS, mousePosition.y - BALL_RADIUS);
+					if(!alreadyBall) balls.emplace_back(mousePosition.x - BALL_RADIUS, mousePosition.y - BALL_RADIUS, balls.size());
 				}else if (mouseButtonPressed->button == sf::Mouse::Button::Right) {
 					for (auto it = balls.begin(); it != balls.end(); ++it) {
 						if (it->shape.getGlobalBounds().contains(mousePositionFloat)) {
@@ -67,6 +83,7 @@ int main(){
 					selectedBall = nullptr;
 				}
 			}
+
 		}
 
 		if (selectedBall && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
@@ -92,13 +109,69 @@ int main(){
 			}
 		}
 
+
+		//check collisiton with boundries
+		for (auto& ball : balls) {
+				sf::Vector2f pos = ball.shape.getPosition();
+				if (pos.x <= 0.0f || pos.x + 2 * BALL_RADIUS >= width ) {
+
+					pos += ball.velocity;
+
+					//if (pos.x + 2 * BALL_RADIUS >= window->getSize().x) {
+						pos.x = window->getSize().x - 2 * BALL_RADIUS;
+						ball.velocity.x= -ball.velocity.x* DAMPING;
+					//}
+					ball.shape.setPosition(pos);
+				}
+		}
+
+		//Check if balls are colliding each other
+		for (int i = 0; i < balls.size(); ++i) {
+			for (int j = i+ 1; j < balls.size(); ++j) {
+				//If shape bound are close to each other, log the id
+				Ball& a= balls[i];
+				Ball& b = balls[j];
+
+				sf::Vector2f aPos = a.shape.getPosition();
+				sf::Vector2f bPos = b.shape.getPosition();
+
+				sf::Vector2f delta = bPos - aPos;
+
+				float distance = std::sqrt(delta.x * delta.x + delta.y * delta.y);
+
+				if ((distance < (BALL_RADIUS * 2)) && distance > 0.0f) {
+
+					sf::Vector2f normal = delta / distance;
+
+					sf::Vector2f relativeVelocity = b.velocity - a.velocity;
+
+					float speed = relativeVelocity.x * normal.x + relativeVelocity.y * normal.y;
+
+					if (speed > 0) {
+						a.shape.setFillColor(sf::Color::Green);
+						b.shape.setFillColor(sf::Color::Blue);
+						a.velocity -= normal * (speed / 2) * DAMPING;
+						b.velocity += normal * (speed / 2) * DAMPING;
+					}
+				}
+				a.shape.setFillColor(sf::Color::Red);
+				b.shape.setFillColor(sf::Color::Red);
+
+			}
+		}
+
 		//Render
 		window->clear(sf::Color::Black);
+
+		std::stringstream ss;
+		ss << "Total Balls: " << balls.size() << "";
+		ballsCount.setString(ss.str());
 
 		//Drawing here
 		for (const auto& ball : balls) {
 			window->draw(ball.shape);
 		}
+		window->draw(ballsCount);
 
 		window->display();
 	}
