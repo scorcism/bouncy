@@ -1,1 +1,38 @@
-﻿LINK : fatal error LNK1168: cannot open C:\Personal\Learning\learning\sfmlDev\codes\bounce_back\x64\Debug\ladoo.exe for writing
+﻿  main.cpp
+C:\Personal\Learning\learning\sfmlDev\codes\bounce_back\External\include\SFML\System\Exception.hpp(41,47): warning C4275: non dll-interface class 'std::runtime_error' used as base for dll-interface class 'sf::Exception'
+  (compiling source file 'main.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\stdexcept(100,19):
+      see declaration of 'std::runtime_error'
+      C:\Personal\Learning\learning\sfmlDev\codes\bounce_back\External\include\SFML\System\Exception.hpp(41,23):
+      see declaration of 'sf::Exception'
+  
+C:\Personal\Learning\learning\sfmlDev\codes\bounce_back\ladoo\main.cpp(56,16): warning C4129: 'F': unrecognized character escape sequence
+C:\Personal\Learning\learning\sfmlDev\codes\bounce_back\ladoo\main.cpp(56,16): warning C4129: 'P': unrecognized character escape sequence
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\xmemory(700,103): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'main.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\xmemory(700,103):
+      the template instantiation context (the oldest one first) is
+          C:\Personal\Learning\learning\sfmlDev\codes\bounce_back\ladoo\main.cpp(93,29):
+          see reference to function template instantiation 'Ball &std::vector<Ball,std::allocator<Ball>>::emplace_back<float,float,unsigned __int64,sf::Font&>(float &&,float &&,unsigned __int64 &&,sf::Font &)' being compiled
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\vector(858,24):
+          see reference to function template instantiation '_Ty &std::vector<_Ty,std::allocator<_Ty>>::_Emplace_one_at_back<float,float,unsigned __int64,sf::Font&>(float &&,float &&,unsigned __int64 &&,sf::Font &)' being compiled
+          with
+          [
+              _Ty=Ball
+          ]
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\vector(776,20):
+          see reference to function template instantiation '_Ty &std::vector<_Ty,std::allocator<_Ty>>::_Emplace_back_with_unused_capacity<float,float,unsigned __int64,sf::Font&>(float &&,float &&,unsigned __int64 &&,sf::Font &)' being compiled
+          with
+          [
+              _Ty=Ball
+          ]
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\vector(794,27):
+          see reference to function template instantiation 'void std::_Default_allocator_traits<_Alloc>::construct<_Ty,float,float,unsigned __int64,sf::Font&>(_Alloc &,_Objty *const ,float &&,float &&,unsigned __int64 &&,sf::Font &)' being compiled
+          with
+          [
+              _Alloc=std::allocator<Ball>,
+              _Ty=Ball,
+              _Objty=Ball
+          ]
+  
+  ladoo.vcxproj -> C:\Personal\Learning\learning\sfmlDev\codes\bounce_back\x64\Debug\ladoo.exe
